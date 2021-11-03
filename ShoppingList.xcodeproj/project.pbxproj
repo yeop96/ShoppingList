@@ -13,6 +13,10 @@
 		27BEEED82732EDF200D0070E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27BEEED62732EDF200D0070E /* Main.storyboard */; };
 		27BEEEDA2732EDF500D0070E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27BEEED92732EDF500D0070E /* Assets.xcassets */; };
 		27BEEEDD2732EDF500D0070E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27BEEEDB2732EDF500D0070E /* LaunchScreen.storyboard */; };
+		27BEEEE52732F5C200D0070E /* ShoppingListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BEEEE42732F5C200D0070E /* ShoppingListModel.swift */; };
+		27BEEEE82732F61300D0070E /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 27BEEEE72732F61300D0070E /* Realm */; };
+		27BEEEEA2732F61300D0070E /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 27BEEEE92732F61300D0070E /* RealmSwift */; };
+		27BEEEED27331F8000D0070E /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 27BEEEEC27331F8000D0070E /* Toast */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +28,7 @@
 		27BEEED92732EDF500D0070E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		27BEEEDC2732EDF500D0070E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		27BEEEDE2732EDF500D0070E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		27BEEEE42732F5C200D0070E /* ShoppingListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +36,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27BEEEED27331F8000D0070E /* Toast in Frameworks */,
+				27BEEEEA2732F61300D0070E /* RealmSwift in Frameworks */,
+				27BEEEE82732F61300D0070E /* Realm in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +67,7 @@
 				27BEEED02732EDF200D0070E /* AppDelegate.swift */,
 				27BEEED22732EDF200D0070E /* SceneDelegate.swift */,
 				27BEEED42732EDF200D0070E /* ViewController.swift */,
+				27BEEEE42732F5C200D0070E /* ShoppingListModel.swift */,
 				27BEEED62732EDF200D0070E /* Main.storyboard */,
 				27BEEED92732EDF500D0070E /* Assets.xcassets */,
 				27BEEEDB2732EDF500D0070E /* LaunchScreen.storyboard */,
@@ -83,6 +92,11 @@
 			dependencies = (
 			);
 			name = ShoppingList;
+			packageProductDependencies = (
+				27BEEEE72732F61300D0070E /* Realm */,
+				27BEEEE92732F61300D0070E /* RealmSwift */,
+				27BEEEEC27331F8000D0070E /* Toast */,
+			);
 			productName = ShoppingList;
 			productReference = 27BEEECD2732EDF200D0070E /* ShoppingList.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +125,10 @@
 				Base,
 			);
 			mainGroup = 27BEEEC42732EDF200D0070E;
+			packageReferences = (
+				27BEEEE62732F61300D0070E /* XCRemoteSwiftPackageReference "realm-cocoa" */,
+				27BEEEEB27331F8000D0070E /* XCRemoteSwiftPackageReference "Toast-Swift" */,
+			);
 			productRefGroup = 27BEEECE2732EDF200D0070E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -141,6 +159,7 @@
 				27BEEED52732EDF200D0070E /* ViewController.swift in Sources */,
 				27BEEED12732EDF200D0070E /* AppDelegate.swift in Sources */,
 				27BEEED32732EDF200D0070E /* SceneDelegate.swift in Sources */,
+				27BEEEE52732F5C200D0070E /* ShoppingListModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +316,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -325,6 +345,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -360,6 +381,43 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		27BEEEE62732F61300D0070E /* XCRemoteSwiftPackageReference "realm-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-cocoa.git";
+			requirement = {
+				kind = exactVersion;
+				version = 10.18.0;
+			};
+		};
+		27BEEEEB27331F8000D0070E /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		27BEEEE72732F61300D0070E /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 27BEEEE62732F61300D0070E /* XCRemoteSwiftPackageReference "realm-cocoa" */;
+			productName = Realm;
+		};
+		27BEEEE92732F61300D0070E /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 27BEEEE62732F61300D0070E /* XCRemoteSwiftPackageReference "realm-cocoa" */;
+			productName = RealmSwift;
+		};
+		27BEEEEC27331F8000D0070E /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 27BEEEEB27331F8000D0070E /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 27BEEEC52732EDF200D0070E /* Project object */;
 }
