@@ -8,6 +8,9 @@
 import UIKit
 import RealmSwift
 import Toast
+import Zip
+import MobileCoreServices
+
 
 class ViewController: UIViewController {
     let localRealm = try! Realm()
@@ -32,7 +35,7 @@ class ViewController: UIViewController {
      
     }
     
-    //삭제
+    //삭제, 백업 및 복구
     @objc func deleteAlert(){
         let alert = UIAlertController(title: "삭제", message: nil, preferredStyle: .actionSheet)
         
@@ -59,12 +62,74 @@ class ViewController: UIViewController {
             }
             return
         }
+        let backup = UIAlertAction(title: "백업", style: .default){ (action) in
+            //백업할 파일에 대한 URL 배열
+            var urlPaths = [URL]()
+            
+            //도큐먼트 폴더 위치
+            if let path = self.documentDirectoryPath(){
+                //백업하고자 하는 파일 URL 확인
+                let realm = (path as NSString).appendingPathComponent("default.realm")
+                //2. 백업하고자 하는 파일 존재 여부 확인
+                if FileManager.default.fileExists(atPath: realm){
+                    //5. URL배열에 백업 파일 URL 추가
+                    urlPaths.append(URL(string: realm)!)
+                }
+                else{
+                    print("백업할 파일이 없습니다.")
+                }
+            }
+            //배열에 대해 압축 파일 만들기
+            do {
+                let zipFilePath = try Zip.quickZipFiles(urlPaths, fileName: "archive") // Zip
+                print("압축 경로: \(zipFilePath)")
+                self.presentActivityViewController()
+            }
+            catch {
+              print("압축 ㄴ")
+            }
+            return
+        }
+        let restore = UIAlertAction(title: "복구", style: .default){ (action) in
+            let documentPicker = UIDocumentPickerViewController(documentTypes: [kUTTypeArchive as String], in: .import)
+            documentPicker.delegate = self
+            documentPicker.allowsMultipleSelection = false // 여러개 선택 가능한지
+            self.present(documentPicker, animated: true, completion: nil)
+            return
+        }
         let noAction = UIAlertAction(title: "취소", style: .cancel)
         alert.addAction(allDelete)
         alert.addAction(confirmedDelete)
         alert.addAction(exceptStarDelete)
+        alert.addAction(backup)
+        alert.addAction(restore)
         alert.addAction(noAction)
         present(alert, animated: true, completion: nil)
+    }
+    
+    //도큐먼트 폴더 위치
+    func documentDirectoryPath() -> String?{
+        let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
+        let userDomainMask = FileManager.SearchPathDomainMask.userDomainMask
+        let path = NSSearchPathForDirectoriesInDomains(documentDirectory, userDomainMask, true)
+        
+        if let directoryPath = path.first{
+            return directoryPath
+        }
+        else{
+            return nil
+        }
+        
+    }
+    //공유 화면
+    func presentActivityViewController(){
+        //압축 파일 경로 가져오기
+        let fileName = (documentDirectoryPath()! as NSString).appendingPathComponent("archive.zip")
+        let fileURL = URL(fileURLWithPath: fileName)
+        let vc = UIActivityViewController(activityItems: [fileURL], applicationActivities: [])
+        
+        //let vc = UIActivityViewController(activityItems: ["?"], applicationActivities: [])
+        self.present(vc, animated: true, completion: nil)
     }
     
     
@@ -250,6 +315,62 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
             tableView.reloadData()
         }
     }
+}
+extension ViewController: UIDocumentPickerDelegate{
+    
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        print("취소됐을때")
+    }
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        //선택한 파일에 대한 경로를 가져와야함
+        guard let selectedFileURL = urls.first else { return }
+        let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let sandboxFileURL = directory.appendingPathComponent(selectedFileURL.lastPathComponent)
+        
+        //압축 해제
+        if FileManager.default.fileExists(atPath: sandboxFileURL.path){
+            //기존에 복구하고자 하는 zip파일을 도큐먼트에 가지고 있을 경우, 도큐먼트에 위치한 zip파일을 압축 해제 하면 됨
+            do{
+                let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                let fileURL = documentDirectory.appendingPathComponent("archive.zip")
+                
+                try Zip.unzipFile(fileURL, destination: documentDirectory, overwrite: true, password: nil, progress: { progress in
+                    let windows = UIApplication.shared.windows
+                                windows.last?.makeToast("복구 완료!", duration: 3.0, position: .top)
+                    self.tableView.reloadData()
+                }, fileOutputHandler: { unzippedFile in
+                    print("unzippedFile : \(unzippedFile) ")
+                })
+            }
+            catch{
+                print("아ㅏㅏ ")
+            }
+            
+        }
+        else{
+            //파일 앱의 zip -> 도큐먼트 폴더에 복사
+            do{
+                try FileManager.default.copyItem(at: selectedFileURL, to: sandboxFileURL)
+                
+                let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                let fileURL = documentDirectory.appendingPathComponent("archive.zip")
+                
+                try Zip.unzipFile(fileURL, destination: documentDirectory, overwrite: true, password: nil, progress: { progress in
+                    let windows = UIApplication.shared.windows
+                                windows.last?.makeToast("복구 완료!", duration: 3.0, position: .top)
+                    self.tableView.reloadData()
+                }, fileOutputHandler: { unzippedFile in
+                    print("unzippedFile : \(unzippedFile) ")
+                })
+            }
+            catch{
+                print("노오오")
+            }
+        }
+        
+    }
+    
 }
 
 // 쇼핑 리스트 추가 섹션 셀
