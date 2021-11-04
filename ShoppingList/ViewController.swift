@@ -128,8 +128,8 @@ class ViewController: UIViewController {
         let fileURL = URL(fileURLWithPath: fileName)
         let vc = UIActivityViewController(activityItems: [fileURL], applicationActivities: [])
         
-        //let vc = UIActivityViewController(activityItems: ["?"], applicationActivities: [])
         self.present(vc, animated: true, completion: nil)
+        
     }
     
     
@@ -232,21 +232,21 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
                 if !localRealm.objects(ShoppingList.self).filter("shoppingContent == '\(cell.purchaseTextField.text!)'").isEmpty{
                     
                     let alert = UIAlertController(title: cell.purchaseTextField.text!, message: "이미 있는 항목이어도 추가하시겠습니까?", preferredStyle: .alert)
-                            let yesAction = UIAlertAction(title: "예", style: .default){ (action) in
-                                let task = ShoppingList(shoppingContent: cell.purchaseTextField.text!, confirmed: false, favorite: false, regDate: Date())
-                        
-                                try! localRealm.write {
-                                    localRealm.add(task)
-                                }
-                                self.tableView.reloadData()
-                                return
-                            }
-                            let noAction = UIAlertAction(title: "아니오", style: .cancel){ (action) in
-                                return
-                            }
-                            alert.addAction(yesAction)
-                            alert.addAction(noAction)
-                            present(alert, animated: true, completion: nil)
+                    let yesAction = UIAlertAction(title: "예", style: .default){ (action) in
+                        let task = ShoppingList(shoppingContent: cell.purchaseTextField.text!, confirmed: false, favorite: false, regDate: Date())
+                
+                        try! localRealm.write {
+                            localRealm.add(task)
+                        }
+                        self.tableView.reloadData()
+                        return
+                    }
+                    let noAction = UIAlertAction(title: "아니오", style: .cancel){ (action) in
+                        return
+                    }
+                    alert.addAction(yesAction)
+                    alert.addAction(noAction)
+                    present(alert, animated: true, completion: nil)
                 }
                 //중복 아니면 그냥 추가
                 else{
@@ -336,11 +336,16 @@ extension ViewController: UIDocumentPickerDelegate{
                 let fileURL = documentDirectory.appendingPathComponent("archive.zip")
                 
                 try Zip.unzipFile(fileURL, destination: documentDirectory, overwrite: true, password: nil, progress: { progress in
-                    let windows = UIApplication.shared.windows
-                                windows.last?.makeToast("복구 완료!", duration: 3.0, position: .top)
-                    self.tableView.reloadData()
+                    print(progress)
                 }, fileOutputHandler: { unzippedFile in
                     print("unzippedFile : \(unzippedFile) ")
+                    
+                    let alert = UIAlertController(title: "복구 완료", message: "앱을 재실행 해주세요", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "확인", style: .default){ (action) in
+                        exit(0)
+                    }
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
                 })
             }
             catch{
@@ -357,11 +362,16 @@ extension ViewController: UIDocumentPickerDelegate{
                 let fileURL = documentDirectory.appendingPathComponent("archive.zip")
                 
                 try Zip.unzipFile(fileURL, destination: documentDirectory, overwrite: true, password: nil, progress: { progress in
-                    let windows = UIApplication.shared.windows
-                                windows.last?.makeToast("복구 완료!", duration: 3.0, position: .top)
-                    self.tableView.reloadData()
+                    print(progress)
                 }, fileOutputHandler: { unzippedFile in
                     print("unzippedFile : \(unzippedFile) ")
+                    
+                    let alert = UIAlertController(title: "복구 완료", message: "앱을 재실행 해주세요", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "확인", style: .default){ (action) in
+                        exit(0)
+                    }
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
                 })
             }
             catch{
